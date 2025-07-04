@@ -1,6 +1,7 @@
-package com.accenture.FranquiciaCore.domain.franchise.repository;
+package com.accenture.franquiciaCore.domain.franchise.repository;
 
-import com.accenture.FranquiciaCore.domain.franchise.model.Subsidiary;
+import com.accenture.franquiciaCore.domain.franchise.model.Subsidiary;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 

@@ -1,12 +1,13 @@
-package com.accenture.FranquiciaCore.infrastructure.persistence.mongo;
+package com.accenture.franquiciaCore.infrastructure.persistence.mongo;
 
 import org.springframework.stereotype.Repository;
 
-import com.accenture.FranquiciaCore.domain.franchise.repository.StockRepository;
-import com.accenture.FranquiciaCore.infrastructure.persistence.mongo.mapper.StockMapper;
-import com.accenture.FranquiciaCore.infrastructure.persistence.mongo.repository.StockMongoRepository;
+import com.accenture.franquiciaCore.domain.franchise.model.Stock;
+import com.accenture.franquiciaCore.domain.franchise.repository.StockRepository;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper.StockMapper;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.repository.StockMongoRepository;
+
 import reactor.core.publisher.Mono;
-import com.accenture.FranquiciaCore.domain.franchise.model.Stock;
 import lombok.RequiredArgsConstructor;
 
 @Repository

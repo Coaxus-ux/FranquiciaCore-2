@@ -1,7 +1,7 @@
-package com.accenture.FranquiciaCore.infrastructure.persistence.mongo.mapper;
+package com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper;
 
-import com.accenture.FranquiciaCore.domain.franchise.model.Stock;
-import com.accenture.FranquiciaCore.infrastructure.persistence.mongo.model.StockDocument;
+import com.accenture.franquiciaCore.domain.franchise.model.Stock;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.StockDocument;
 
 public class StockMapper {
   public static Stock toDomain(StockDocument doc) {

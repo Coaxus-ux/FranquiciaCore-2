@@ -1,11 +1,11 @@
-package com.accenture.FranquiciaCore.infrastructure.persistence.mongo;
+package com.accenture.franquiciaCore.infrastructure.persistence.mongo;
 
 import org.springframework.stereotype.Repository;
 
-import com.accenture.FranquiciaCore.domain.franchise.model.Subsidiary;
-import com.accenture.FranquiciaCore.domain.franchise.repository.SubsidiaryRepository;
-import com.accenture.FranquiciaCore.infrastructure.persistence.mongo.mapper.SubsidaryMapper;
-import com.accenture.FranquiciaCore.infrastructure.persistence.mongo.repository.SubsidaryMongoRespository;
+import com.accenture.franquiciaCore.domain.franchise.model.Subsidiary;
+import com.accenture.franquiciaCore.domain.franchise.repository.SubsidiaryRepository;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper.SubsidaryMapper;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.repository.SubsidaryMongoRespository;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

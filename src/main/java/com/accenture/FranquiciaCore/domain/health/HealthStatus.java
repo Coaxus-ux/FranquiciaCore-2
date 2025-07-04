@@ -1,4 +1,4 @@
-package com.accenture.FranquiciaCore.domain.health;
+package com.accenture.franquiciaCore.domain.health;
 
 public enum HealthStatus {
     UP,

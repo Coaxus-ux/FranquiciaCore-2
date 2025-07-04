@@ -1,6 +1,6 @@
-package com.accenture.FranquiciaCore.domain.franchise.model;
+package com.accenture.franquiciaCore.domain.franchise.model;
 
-import com.accenture.FranquiciaCore.domain.franchise.model.enums.CategoryProduct;
+import com.accenture.franquiciaCore.domain.franchise.model.enums.CategoryProduct;
 
 import lombok.*;
 

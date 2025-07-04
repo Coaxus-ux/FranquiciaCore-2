@@ -1,10 +1,10 @@
-package com.accenture.FranquiciaCore.infrastructure.persistence.mongo.mapper;
+package com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper;
 
-import com.accenture.FranquiciaCore.domain.franchise.model.Product;
-import com.accenture.FranquiciaCore.infrastructure.persistence.mongo.model.ProductDocument;
-import com.accenture.FranquiciaCore.domain.franchise.model.enums.CategoryProduct;
-import com.accenture.FranquiciaCore.domain.franchise.model.Stock;
-import com.accenture.FranquiciaCore.infrastructure.persistence.mongo.model.StockDocument;
+import com.accenture.franquiciaCore.domain.franchise.model.Product;
+import com.accenture.franquiciaCore.domain.franchise.model.Stock;
+import com.accenture.franquiciaCore.domain.franchise.model.enums.CategoryProduct;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.ProductDocument;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.StockDocument;
 
 public class ProductMapper {
     public static Product toDomain(ProductDocument doc) {

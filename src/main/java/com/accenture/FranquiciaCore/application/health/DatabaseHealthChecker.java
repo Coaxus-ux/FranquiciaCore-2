@@ -1,6 +1,7 @@
-package com.accenture.FranquiciaCore.application.health;
+package com.accenture.franquiciaCore.application.health;
 
-import com.accenture.FranquiciaCore.domain.health.HealthCheck;
+import com.accenture.franquiciaCore.domain.health.HealthCheck;
+
 import reactor.core.publisher.Mono;
 
 public interface DatabaseHealthChecker {

@@ -1,4 +1,4 @@
-package com.accenture.FranquiciaCore.domain.franchise.model;
+package com.accenture.franquiciaCore.domain.franchise.model;
 
 import lombok.*;
 

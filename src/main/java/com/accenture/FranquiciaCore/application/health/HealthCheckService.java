@@ -1,11 +1,13 @@
-package com.accenture.FranquiciaCore.application.health;
+package com.accenture.franquiciaCore.application.health;
 
-import com.accenture.FranquiciaCore.domain.health.HealthCheck;
-import com.accenture.FranquiciaCore.domain.health.HealthReport;
-import com.accenture.FranquiciaCore.domain.health.HealthStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import com.accenture.franquiciaCore.domain.health.HealthCheck;
+import com.accenture.franquiciaCore.domain.health.HealthReport;
+import com.accenture.franquiciaCore.domain.health.HealthStatus;
+
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;

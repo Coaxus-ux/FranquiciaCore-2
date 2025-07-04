@@ -1,8 +1,9 @@
-package com.accenture.FranquiciaCore.infrastructure.persistence.mongo.repository;
+package com.accenture.franquiciaCore.infrastructure.persistence.mongo.repository;
 
 
-import com.accenture.FranquiciaCore.infrastructure.persistence.mongo.model.FranchiseDocument;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
+
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.FranchiseDocument;
 
 public interface FranchiseMongoRepository extends ReactiveMongoRepository<FranchiseDocument, String> {
 }

@@ -1,4 +1,4 @@
-package com.accenture.FranquiciaCore.repository;
+package com.accenture.franquiciaCore.repository;
 
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.data.repository.NoRepositoryBean;

@@ -1,13 +1,15 @@
-package com.accenture.FranquiciaCore.infrastructure.rest;
+package com.accenture.franquiciaCore.infrastructure.rest;
 
-import com.accenture.FranquiciaCore.application.health.HealthCheckService;
-import com.accenture.FranquiciaCore.domain.health.HealthReport;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.accenture.franquiciaCore.application.health.HealthCheckService;
+import com.accenture.franquiciaCore.domain.health.HealthReport;
+
 import reactor.core.publisher.Mono;
 
 @RestController

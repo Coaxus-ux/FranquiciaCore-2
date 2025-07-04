@@ -1,4 +1,4 @@
-package com.accenture.FranquiciaCore.infrastructure.persistence.mongo.model;
+package com.accenture.franquiciaCore.infrastructure.persistence.mongo.model;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;

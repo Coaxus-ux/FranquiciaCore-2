@@ -1,7 +1,7 @@
-package com.accenture.FranquiciaCore.infrastructure.persistence.mongo.mapper;
+package com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper;
 
-import com.accenture.FranquiciaCore.domain.franchise.model.Franchise;
-import com.accenture.FranquiciaCore.infrastructure.persistence.mongo.model.FranchiseDocument;
+import com.accenture.franquiciaCore.domain.franchise.model.Franchise;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.FranchiseDocument;
 
 public class FranchiseMapper {
     public static Franchise toDomain(FranchiseDocument doc) {

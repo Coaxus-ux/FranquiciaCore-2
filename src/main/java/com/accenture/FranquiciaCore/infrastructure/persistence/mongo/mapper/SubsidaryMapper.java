@@ -1,7 +1,7 @@
-package com.accenture.FranquiciaCore.infrastructure.persistence.mongo.mapper;
+package com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper;
 
-import com.accenture.FranquiciaCore.domain.franchise.model.Subsidiary;
-import com.accenture.FranquiciaCore.infrastructure.persistence.mongo.model.SubsidaryDocument;
+import com.accenture.franquiciaCore.domain.franchise.model.Subsidiary;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.SubsidaryDocument;
 
 public class SubsidaryMapper {
   public static Subsidiary toDomain(SubsidaryDocument doc) {
