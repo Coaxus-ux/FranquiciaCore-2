@@ -10,5 +10,4 @@ public interface FranchiseRepository {
     Flux<Franchise> findAll();
     Mono<Void> delete(String id);
     Mono<Franchise> update(Franchise franchise);
-
 }
