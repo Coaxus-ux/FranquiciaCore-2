@@ -1,13 +1,18 @@
 package com.accenture.franquiciaCore.domain.franchise.model;
 
-import lombok.*;
+import com.accenture.franquiciaCore.domain.franchise.valueobject.StockId;
 
-@Data
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
+
+@Getter
+@ToString
+@EqualsAndHashCode(of = "id")
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Stock {
-  private String id;
+  private StockId id;
   private int quantity;
 
   public void addQuantity(int quantity) {

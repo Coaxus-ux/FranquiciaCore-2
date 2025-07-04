@@ -1,17 +1,22 @@
 package com.accenture.franquiciaCore.domain.franchise.model;
 
 import com.accenture.franquiciaCore.domain.franchise.model.enums.CategoryProduct;
+import com.accenture.franquiciaCore.domain.franchise.valueobject.ProductId;
+import com.accenture.franquiciaCore.domain.franchise.valueobject.SubsidiaryId;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
+@Getter
+@ToString
+@EqualsAndHashCode(of = "id")
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
 public class Product {
-  private String id;
+  private ProductId id;
   private String name;
   private CategoryProduct category;
   private Stock stock;
-
+  private SubsidiaryId subsidiaryId;
 }

@@ -1,13 +1,18 @@
 package com.accenture.franquiciaCore.domain.franchise.model;
 
-import lombok.*;
+import com.accenture.franquiciaCore.domain.franchise.valueobject.FranchiseId;
+import com.accenture.franquiciaCore.domain.franchise.valueobject.SubsidiaryId;
+import lombok.Builder;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.ToString;
 
-@Data
+@Getter
+@ToString
+@EqualsAndHashCode(of = "id")
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Subsidiary {
-    private String id;
+    private SubsidiaryId id;
     private String name;
-    private String franchiseId;
+    private FranchiseId franchiseId;
 }

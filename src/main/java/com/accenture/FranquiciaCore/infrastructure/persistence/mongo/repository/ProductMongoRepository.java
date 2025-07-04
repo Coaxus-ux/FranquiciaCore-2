@@ -7,6 +7,5 @@ import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.Produ
 import reactor.core.publisher.Flux;
 
 public interface ProductMongoRepository extends ReactiveMongoRepository<ProductDocument, String> {
-    Flux<ProductDocument> findByFranchiseId(String franchiseId);
     Flux<ProductDocument> findBySubsidiaryId(String subsidiaryId);
 }

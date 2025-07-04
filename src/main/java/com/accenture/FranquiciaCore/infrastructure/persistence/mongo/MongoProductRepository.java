@@ -41,11 +41,6 @@ public class MongoProductRepository implements ProductRepository {
         return save(product);
     }
 
-    @Override
-    public Flux<Product> findByFranchiseId(String franchiseId) {
-        return repository.findByFranchiseId(franchiseId)
-                .map(ProductMapper::toDomain);
-    }
 
     @Override
     public Flux<Product> findBySubsidiaryId(String subsidiaryId) {
