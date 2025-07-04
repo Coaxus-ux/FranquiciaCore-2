@@ -7,6 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Stock {
+  private String id;
   private int quantity;
 
   public void addQuantity(int quantity) {
