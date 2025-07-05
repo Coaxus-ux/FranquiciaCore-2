@@ -1,6 +1,7 @@
 package com.accenture.franquiciaCore.infrastructure.rest.franchise.controller;
 
 import java.net.URI;
+import java.util.List;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,9 +17,9 @@ import com.accenture.franquiciaCore.application.franchise.FindFranchiseCommand;
 import com.accenture.franquiciaCore.application.franchise.FindFranchiseUseCase;
 import com.accenture.franquiciaCore.application.franchise.UpdateFranchiseCommand;
 import com.accenture.franquiciaCore.application.franchise.UpdateFranchiseUseCase;
+import com.accenture.franquiciaCore.application.franchise.FindAllFranchiseUseCase;
 import com.accenture.franquiciaCore.infrastructure.rest.franchise.dto.CreateFranchiseRequest;
 import com.accenture.franquiciaCore.infrastructure.rest.franchise.dto.FranchiseResponse;
-import com.accenture.franquiciaCore.infrastructure.rest.franchise.dto.UpdateFranchiseRequest;
 import com.accenture.franquiciaCore.infrastructure.rest.franchise.assembler.FranchiseModelAssembler;
 
 import reactor.core.publisher.Mono;
@@ -36,6 +37,7 @@ public class FranchiseController {
   private final CreateFranchiseUseCase createFranchiseUseCase;
   private final FindFranchiseUseCase findFranchiseUseCase;
   private final UpdateFranchiseUseCase updateFranchiseUseCase;
+  private final FindAllFranchiseUseCase findAllFranchiseUseCase;
   private final FranchiseModelAssembler assembler;
 
   @PostMapping
@@ -67,7 +69,7 @@ public class FranchiseController {
   @PutMapping("/{id}")
   public Mono<ResponseEntity<EntityModel<FranchiseResponse>>> update(
       @PathVariable String id,
-      @Valid @RequestBody UpdateFranchiseRequest req) {
+      @Valid @RequestBody CreateFranchiseRequest req) {
     UpdateFranchiseCommand cmd = new UpdateFranchiseCommand(id, req.getName());
     return updateFranchiseUseCase.updateFranchise(cmd)
         .map(entity -> assembler.toModel(entity))
@@ -76,4 +78,11 @@ public class FranchiseController {
             e -> Mono.just(ResponseEntity.badRequest().build()));
   }
 
+  @GetMapping("/all")
+  public Mono<ResponseEntity<List<EntityModel<FranchiseResponse>>>> findAll() {
+    return findAllFranchiseUseCase.findAll()
+        .map(assembler::toModel)
+        .collectList()
+        .map(ResponseEntity::ok);
+  }
 }

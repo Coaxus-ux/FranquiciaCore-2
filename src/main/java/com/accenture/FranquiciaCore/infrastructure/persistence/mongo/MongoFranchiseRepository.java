@@ -36,11 +36,6 @@ public class MongoFranchiseRepository implements FranchiseRepository {
     }
 
     @Override
-    public Mono<Void> delete(String id) {
-        return repository.deleteById(id);
-    }
-
-    @Override
     public Mono<Franchise> update(Franchise franchise) {
         return save(franchise);
     }

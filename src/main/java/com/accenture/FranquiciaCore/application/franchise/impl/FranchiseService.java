@@ -10,14 +10,17 @@ import com.accenture.franquiciaCore.domain.shared.util.IdGenerator;
 import com.accenture.franquiciaCore.application.franchise.CreateFranchiseCommand;
 import com.accenture.franquiciaCore.application.franchise.UpdateFranchiseCommand;
 import com.accenture.franquiciaCore.application.franchise.UpdateFranchiseUseCase;
+import com.accenture.franquiciaCore.application.franchise.FindAllFranchiseUseCase;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
 @RequiredArgsConstructor
-public class FranchiseService implements CreateFranchiseUseCase, FindFranchiseUseCase, UpdateFranchiseUseCase {
+public class FranchiseService implements CreateFranchiseUseCase, FindFranchiseUseCase, UpdateFranchiseUseCase, FindAllFranchiseUseCase {
   private final FranchiseRepository franchiseRepository;
 
   @Override
@@ -45,5 +48,10 @@ public class FranchiseService implements CreateFranchiseUseCase, FindFranchiseUs
               .build();
           return franchiseRepository.save(updatedFranchise);
         });
+  }
+
+  @Override
+  public Flux<Franchise> findAll() {
+    return franchiseRepository.findAll();
   }
 }
