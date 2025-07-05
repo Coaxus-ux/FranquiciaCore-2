@@ -28,15 +28,17 @@ public class SubsidiaryService implements AddSubsidiaryUseCase, FindAllSubsidiar
 
   @Override
   public Mono<Subsidiary> addSubsidiary(AddSubsidiaryCommand cmd) {
+    // Validate command before processing
+    cmd.validate();
 
     return franchiseRepository.findById(cmd.getFranchiseId())
       .switchIfEmpty(Mono.error(new NoSuchElementException("Franchise not found " + cmd.getFranchiseId())))
       .flatMap(franchise -> {
-        var sub = Subsidiary.builder()
-            .id(new SubsidiaryId(IdGenerator.generate()))
-            .name(cmd.getName())
-            .franchiseId(franchise.getId())
-            .build();
+        var sub = new Subsidiary(
+            new SubsidiaryId(IdGenerator.generate()),
+            cmd.getName().trim(),
+            franchise.getId()
+        );
         franchise.addSubsidiary(sub);
         return subsidiaryRepository.save(sub);
       });
@@ -54,17 +56,20 @@ public class SubsidiaryService implements AddSubsidiaryUseCase, FindAllSubsidiar
   }
   @Override
   public Mono<Subsidiary> update(UpdateSubsidiaryCommand cmd) {
+    // Validate command before processing
+    cmd.validate();
+    
     return subsidiaryRepository.findById(cmd.getId())
       .switchIfEmpty(Mono.error(new NoSuchElementException("Subsidiary not found " + cmd.getId())))
             .flatMap(subsidiary -> 
         franchiseRepository.findById(cmd.getFranchiseId())
         .switchIfEmpty(Mono.error(new NoSuchElementException("Franchise not found " + cmd.getFranchiseId())))
         .flatMap(franchise -> {
-          var updatedSubsidiary = Subsidiary.builder()
-              .id(subsidiary.getId())
-              .name(cmd.getName())
-                .franchiseId(franchise.getId())
-                .build();
+          var updatedSubsidiary = new Subsidiary(
+              subsidiary.getId(),
+              cmd.getName().trim(),
+              franchise.getId()
+          );
             return subsidiaryRepository.save(updatedSubsidiary);
           })
       );

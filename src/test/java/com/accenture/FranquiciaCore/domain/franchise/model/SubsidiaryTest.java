@@ -91,35 +91,36 @@ class SubsidiaryTest {
     }
 
     @Test
-    @DisplayName("Should handle null values in builder")
-    void shouldHandleNullValuesInBuilder() {
-        Subsidiary subsidiary = Subsidiary.builder()
-            .id(null)
-            .name(null)
-            .franchiseId(null)
-            .build();
-        
-        assertNull(subsidiary.getId());
-        assertNull(subsidiary.getName());
-        assertNull(subsidiary.getFranchiseId());
+    @DisplayName("Should throw exception when name is null in builder")
+    void shouldThrowExceptionWhenNameIsNullInBuilder() {
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
+            Subsidiary.builder()
+                .id(null)
+                .name(null)
+                .franchiseId(null)
+                .build();
+        });
+        assertEquals("Subsidiary name cannot be empty", exception.getMessage());
     }
 
     @Test
-    @DisplayName("Should create subsidiary with empty name")
-    void shouldCreateSubsidiaryWithEmptyName() {
+    @DisplayName("Should not allow creation of subsidiary with empty name")
+    void shouldNotAllowCreationOfSubsidiaryWithEmptyName() {
         SubsidiaryId subsidiaryId = new SubsidiaryId("subsidiary-123");
         String emptyName = "";
         FranchiseId franchiseId = new FranchiseId("franchise-456");
-        
-        Subsidiary subsidiary = Subsidiary.builder()
-            .id(subsidiaryId)
-            .name(emptyName)
-            .franchiseId(franchiseId)
-            .build();
-        
-        assertEquals(subsidiaryId, subsidiary.getId());
-        assertEquals(emptyName, subsidiary.getName());
-        assertEquals(franchiseId, subsidiary.getFranchiseId());
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            new Subsidiary(subsidiaryId, emptyName, franchiseId);
+        });
+
+        assertThrows(IllegalArgumentException.class, () -> {
+            Subsidiary.builder()
+                .id(subsidiaryId)
+                .name(emptyName)
+                .franchiseId(franchiseId)
+                .build();
+        });
     }
 
     @Test
