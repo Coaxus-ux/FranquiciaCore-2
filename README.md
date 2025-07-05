@@ -22,14 +22,22 @@
 
 ```mermaid
 flowchart TD
-    UI([Cliente]) --HTTP--> GW[Spring WebFlux Controllers]
-    GW --> APP[Application Layer (Use Cases)]
-    APP --> DOMAIN[Domain Model]
-    APP --> INFRA[Infrastructure]
-    INFRA --> MONGO[(Reactive MongoDB)]
-    subgraph Infra Details
-      INFRA_REPOS[Reactive Repositories]
+    %% ─── Capa de entrada ──────────────────────────────
+    UI["Cliente"] -->|HTTP| GW["Spring WebFlux<br/>Controllers"]
+
+    %% ─── Aplicación y dominio ─────────────────────────
+    GW --> APP["Application Layer<br/>(Use Cases)"]
+    APP --> DOMAIN["Domain Model"]
+
+    %% ─── Infraestructura y BD ─────────────────────────
+    APP --> INFRA["Infrastructure"]
+    INFRA --> MONGO["Reactive MongoDB"]
+
+    %% ─── Detalle de infra ─────────────────────────────
+    subgraph "Infra Details"
+        INFRA_REPOS["Reactive Repositories"]
     end
+    INFRA -.-> INFRA_REPOS
 ```
 
 * **Hexagonal / Clean Architecture**: la capa *application* orquesta casos de uso; la capa *domain* contiene modelos de negocio; la capa *infrastructure* provee controladores REST y adaptadores de persistencia.
