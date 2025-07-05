@@ -4,8 +4,8 @@ import org.springframework.stereotype.Repository;
 
 import com.accenture.franquiciaCore.domain.franchise.model.Subsidiary;
 import com.accenture.franquiciaCore.domain.franchise.repository.SubsidiaryRepository;
-import com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper.SubsidaryMapper;
-import com.accenture.franquiciaCore.infrastructure.persistence.mongo.repository.SubsidaryMongoRespository;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper.SubsidiaryMapper;
+import com.accenture.franquiciaCore.infrastructure.persistence.mongo.repository.SubsidiaryMongoRespository;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -14,19 +14,19 @@ import lombok.RequiredArgsConstructor;
 
 @Repository
 @RequiredArgsConstructor
-public class MongoSubsidaryRespository implements SubsidiaryRepository {
-    private final SubsidaryMongoRespository repository;
+public class MongoSubsidiaryRespository implements SubsidiaryRepository {
+    private final SubsidiaryMongoRespository repository;
 
     @Override
     public Mono<Subsidiary> findById(String id) {
         return repository.findById(id)
-                .map(SubsidaryMapper::toDomain);
+                .map(SubsidiaryMapper::toDomain);
     }
 
     @Override
     public Mono<Subsidiary> save(Subsidiary subsidiary) {
-        return repository.save(SubsidaryMapper.toDocument(subsidiary))
-                .map(SubsidaryMapper::toDomain);
+        return repository.save(SubsidiaryMapper.toDocument(subsidiary))
+                .map(SubsidiaryMapper::toDomain);
     }
 
     @Override
@@ -42,6 +42,6 @@ public class MongoSubsidaryRespository implements SubsidiaryRepository {
     @Override
     public Flux<Subsidiary> findByFranchiseId(String franchiseId) {
         return repository.findByFranchiseId(franchiseId)
-                .map(SubsidaryMapper::toDomain);
+                .map(SubsidiaryMapper::toDomain);
     }
 }

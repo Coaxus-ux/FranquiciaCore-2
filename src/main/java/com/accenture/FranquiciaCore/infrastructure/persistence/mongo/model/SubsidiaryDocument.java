@@ -9,7 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class SubsidaryDocument {
+public class SubsidiaryDocument {
   @Id
   private String id;
   private String name;
