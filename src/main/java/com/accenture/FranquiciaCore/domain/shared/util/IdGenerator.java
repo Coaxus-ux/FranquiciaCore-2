@@ -1,9 +1,9 @@
 package com.accenture.franquiciaCore.domain.shared.util;
 
-import java.util.UUID;
+import org.bson.types.ObjectId;
 
 public final class IdGenerator {
   public static String generate() {
-    return UUID.randomUUID().toString();
+    return new ObjectId().toString();
   }
 }
