@@ -1,5 +1,6 @@
 package com.accenture.franquiciaCore.domain.franchise.model;
 
+import com.accenture.franquiciaCore.domain.franchise.valueobject.ProductId;
 import com.accenture.franquiciaCore.domain.franchise.valueobject.StockId;
 
 import lombok.Builder;
@@ -10,7 +11,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode(of = "id")
-@Builder
+@Builder(toBuilder = true)
 public class Stock {
   private StockId id;
   private int quantity;
@@ -24,5 +25,10 @@ public class Stock {
       throw new IllegalArgumentException("Quantity cannot be greater than the stock");
     }
     this.quantity -= quantity;
+  }
+  public Stock withProductId(ProductId productId) {
+    return this.toBuilder()
+               .id(new StockId(productId.getValue()))
+               .build();
   }
 }

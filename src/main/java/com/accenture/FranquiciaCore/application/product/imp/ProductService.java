@@ -1,0 +1,131 @@
+package com.accenture.franquiciaCore.application.product.imp;
+
+import com.accenture.franquiciaCore.application.product.AddProductCommand;
+import com.accenture.franquiciaCore.application.product.AddProductUseCase;
+import com.accenture.franquiciaCore.application.product.DeleteProductCommand;
+import com.accenture.franquiciaCore.application.product.DeleteProductUseCase;
+import com.accenture.franquiciaCore.application.product.UpdateProductStockCommand;
+import com.accenture.franquiciaCore.application.product.UpdateProductStockUseCase;
+import com.accenture.franquiciaCore.application.product.UpdateProductNameCommand;
+import com.accenture.franquiciaCore.application.product.UpdateProductNameUseCase;
+import com.accenture.franquiciaCore.application.product.FindMaxStockCommand;
+import com.accenture.franquiciaCore.application.product.FindMaxStockUseCase;
+import com.accenture.franquiciaCore.domain.franchise.model.enums.CategoryProduct;
+import com.accenture.franquiciaCore.domain.franchise.model.Product;
+import com.accenture.franquiciaCore.domain.franchise.model.Stock;
+import com.accenture.franquiciaCore.domain.franchise.repository.ProductRepository;
+import com.accenture.franquiciaCore.domain.franchise.repository.StockRepository;
+import com.accenture.franquiciaCore.domain.franchise.repository.SubsidiaryRepository;
+import com.accenture.franquiciaCore.domain.franchise.valueobject.ProductId;
+import com.accenture.franquiciaCore.domain.franchise.valueobject.StockId;
+import com.accenture.franquiciaCore.domain.shared.util.IdGenerator;
+
+import java.util.NoSuchElementException;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+@Service
+@RequiredArgsConstructor
+public class ProductService implements
+    AddProductUseCase,
+    DeleteProductUseCase,
+    UpdateProductStockUseCase,
+    UpdateProductNameUseCase,
+    FindMaxStockUseCase {
+
+  private final ProductRepository productRepository;
+  private final SubsidiaryRepository subsidiaryRepository;
+  private final StockRepository stockRepository;
+
+  @Override
+  public Mono<Product> addProduct(AddProductCommand cmd) {
+    return subsidiaryRepository.findById(cmd.getSubsidiaryId())
+        .switchIfEmpty(Mono.error(new NoSuchElementException(
+            "Subsidiary not found: " + cmd.getSubsidiaryId())))
+        .flatMap(sub -> {
+          // 1) Generamos IDs
+          String newProdId = IdGenerator.generate();
+          String newStockId = IdGenerator.generate();
+
+          // 2) Construimos el dominio Product (sin stock aún)
+          Product product = Product.builder()
+              .id(new ProductId(newProdId))
+              .name(cmd.getName())
+              .category(CategoryProduct.valueOf(cmd.getCategory().toUpperCase()))
+              .subsidiaryId(sub.getId())
+              .build();
+
+          // 3) Guardamos el producto
+          return productRepository.save(product)
+              .flatMap(savedProduct -> {
+                // 4) Creamos el stock asociado
+                Stock stock = Stock.builder()
+                    .id(new StockId(newStockId))
+                    .quantity(cmd.getQuantity())
+                    .build();
+
+                // 5) Persistimos el stock en su colección (se asume que
+                // StockRepository.save mapea internamente el productId)
+                return stockRepository
+                    .save(stock.withProductId(savedProduct.getId()))
+                    .thenReturn(
+                        // 6) Devolvemos el product ya “enriquecido” con su stock
+                        savedProduct.withStock(stock));
+              });
+        });
+  }
+
+  @Override
+  public Mono<Void> deleteProduct(DeleteProductCommand cmd) {
+    return productRepository.delete(cmd.getProductId())
+        .then(stockRepository.deleteByProductId(new ProductId(cmd.getProductId())));
+  }
+
+  @Override
+  public Mono<Product> updateStock(UpdateProductStockCommand cmd) {
+    return productRepository.findById(cmd.getProductId())
+        .switchIfEmpty(Mono.error(new NoSuchElementException("Product not found")))
+        .flatMap(p -> {
+          Stock s = Stock.builder()
+              .id(p.getStock().getId())
+              .quantity(cmd.getQuantity())
+              .build();
+          Product updated = Product.builder()
+              .id(p.getId())
+              .name(p.getName())
+              .category(p.getCategory())
+              .stock(s)
+              .subsidiaryId(p.getSubsidiaryId())
+              .build();
+          return productRepository.update(updated);
+        });
+  }
+
+  @Override
+  public Mono<Product> updateName(UpdateProductNameCommand cmd) {
+    return productRepository.findById(cmd.getProductId())
+        .switchIfEmpty(Mono.error(new NoSuchElementException("Product not found")))
+        .flatMap(p -> {
+          Product updated = Product.builder()
+              .id(p.getId())
+              .name(cmd.getName())
+              .category(p.getCategory())
+              .stock(p.getStock())
+              .subsidiaryId(p.getSubsidiaryId())
+              .build();
+          return productRepository.update(updated);
+        });
+  }
+
+  @Override
+  public Flux<Product> findMaxStockByFranchise(FindMaxStockCommand cmd) {
+    return subsidiaryRepository.findByFranchiseId(cmd.getFranchiseId())
+        .flatMap(sub -> productRepository.findBySubsidiaryId(sub.getId().getValue())
+            .sort((a, b) -> Integer.compare(b.getStock().getQuantity(), a.getStock().getQuantity()))
+            .next() // Mono<Product>
+        );
+  }
+}

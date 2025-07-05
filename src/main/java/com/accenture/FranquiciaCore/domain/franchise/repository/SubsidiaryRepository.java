@@ -10,4 +10,5 @@ public interface SubsidiaryRepository {
     Mono<Subsidiary> save(Subsidiary subsidiary);
     Mono<Subsidiary> update(Subsidiary subsidiary);
     Flux<Subsidiary> findAll();
+    Flux<Subsidiary> findByFranchiseId(String franchiseId);
 }

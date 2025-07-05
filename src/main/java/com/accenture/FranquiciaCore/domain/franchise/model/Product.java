@@ -12,11 +12,17 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode(of = "id")
-@Builder
+@Builder(toBuilder = true)
 public class Product {
   private ProductId id;
   private String name;
   private CategoryProduct category;
   private Stock stock;
   private SubsidiaryId subsidiaryId;
+
+  public Product withStock(Stock stock) {
+    return this.toBuilder()
+               .stock(stock)
+               .build();
+  }
 }

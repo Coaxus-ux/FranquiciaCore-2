@@ -39,4 +39,12 @@ public class MongoSubsidiaryRespository implements SubsidiaryRepository {
         return repository.findAll()
                 .map(SubsidiaryMapper::toDomain);
     }
+
+    @Override
+    public Flux<Subsidiary> findByFranchiseId(String franchiseId) {
+        return repository
+                .findByFranchiseId(new ObjectId(franchiseId))
+                .map(SubsidiaryMapper::toDomain);
+    }
+
 }

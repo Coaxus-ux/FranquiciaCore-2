@@ -12,7 +12,6 @@ import com.accenture.franquiciaCore.domain.franchise.model.Subsidiary;
 import com.accenture.franquiciaCore.domain.franchise.repository.FranchiseRepository;
 import com.accenture.franquiciaCore.domain.franchise.repository.SubsidiaryRepository;
 import com.accenture.franquiciaCore.domain.franchise.valueobject.SubsidiaryId;
-import com.accenture.franquiciaCore.domain.franchise.valueobject.FranchiseId;
 import com.accenture.franquiciaCore.application.subsidiary.UpdateSubsidiaryCommand;
 import com.accenture.franquiciaCore.application.subsidiary.UpdateSubsidiaryUseCase;
 

@@ -1,9 +1,11 @@
 package com.accenture.franquiciaCore.infrastructure.persistence.mongo;
 
+import org.bson.types.ObjectId;
 import org.springframework.stereotype.Repository;
 
 import com.accenture.franquiciaCore.domain.franchise.model.Stock;
 import com.accenture.franquiciaCore.domain.franchise.repository.StockRepository;
+import com.accenture.franquiciaCore.domain.franchise.valueobject.ProductId;
 import com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper.StockMapper;
 import com.accenture.franquiciaCore.infrastructure.persistence.mongo.repository.StockMongoRepository;
 
@@ -17,7 +19,7 @@ public class MongoStockRepository implements StockRepository {
   private final StockMongoRepository repository;
 
   @Override
-  public Mono<Stock> findByProductId(String productId) {
+  public Mono<Stock> findByProductId(ProductId productId) {
     return repository.findByProductId(productId)
         .map(StockMapper::toDomain);
   }
@@ -35,6 +37,12 @@ public class MongoStockRepository implements StockRepository {
 
   @Override
   public Mono<Void> delete(String id) {
-    return repository.deleteById(id);
+    return repository.deleteById(new ObjectId(id));
+  }
+
+  @Override
+  public Mono<Void> deleteByProductId(ProductId productId) {
+    ObjectId oid = new ObjectId(productId.getValue());
+    return repository.deleteById(oid);
   }
 }
