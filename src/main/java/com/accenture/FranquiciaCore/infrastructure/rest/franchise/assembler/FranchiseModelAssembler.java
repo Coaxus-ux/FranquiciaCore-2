@@ -34,6 +34,9 @@ public class FranchiseModelAssembler
                 .withRel("create"))
         .add(linkTo(methodOn(FranchiseController.class)
                         .update(entity.getId().getValue(), null))
-                .withRel("update"));
+                .withRel("update"))
+        .add(linkTo(methodOn(FranchiseController.class)
+                        .findAll())
+                .withRel("findAll"));
   }
 }

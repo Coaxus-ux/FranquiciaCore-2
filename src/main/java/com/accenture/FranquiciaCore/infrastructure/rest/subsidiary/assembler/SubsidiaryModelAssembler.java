@@ -25,9 +25,19 @@ public class SubsidiaryModelAssembler
   @Override
   public EntityModel<SubsidiaryResponse> toModel(Subsidiary entity) {
     SubsidiaryResponse dto = mapper.toResponse(entity);
+
     return EntityModel.of(dto)
         .add(linkTo(methodOn(SubsidiaryController.class)
-                        .create(null))
-                .withRel("create"));
+                      .create(null))
+             .withRel("create"))
+        .add(linkTo(methodOn(SubsidiaryController.class)
+                      .update(entity.getId().getValue(),null))
+             .withRel("update"))
+        .add(linkTo(methodOn(SubsidiaryController.class)
+                      .findById(entity.getId().getValue()))
+             .withRel("findById"))
+        .add(linkTo(methodOn(SubsidiaryController.class)
+                      .findAll())
+             .withRel("findAll"));
   }
 }
