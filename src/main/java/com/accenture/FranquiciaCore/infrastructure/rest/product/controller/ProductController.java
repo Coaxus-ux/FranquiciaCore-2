@@ -17,7 +17,6 @@ import com.accenture.franquiciaCore.application.product.UpdateProductNameCommand
 import com.accenture.franquiciaCore.application.product.UpdateProductNameUseCase;
 import com.accenture.franquiciaCore.application.product.UpdateProductStockCommand;
 import com.accenture.franquiciaCore.application.product.UpdateProductStockUseCase;
-import com.accenture.franquiciaCore.domain.franchise.model.Product;
 import com.accenture.franquiciaCore.infrastructure.rest.product.assembler.ProductModelAssembler;
 import com.accenture.franquiciaCore.infrastructure.rest.product.dto.CreateProductRequest;
 import com.accenture.franquiciaCore.infrastructure.rest.product.dto.ProductResponse;

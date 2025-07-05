@@ -85,24 +85,23 @@ public class ProductService implements
   }
 
   @Override
-  public Mono<Product> updateStock(UpdateProductStockCommand cmd) {
-    return productRepository.findById(cmd.getProductId())
-        .switchIfEmpty(Mono.error(new NoSuchElementException("Product not found")))
-        .flatMap(p -> {
-          Stock s = Stock.builder()
-              .id(p.getStock().getId())
-              .quantity(cmd.getQuantity())
-              .build();
-          Product updated = Product.builder()
-              .id(p.getId())
-              .name(p.getName())
-              .category(p.getCategory())
-              .stock(s)
-              .subsidiaryId(p.getSubsidiaryId())
-              .build();
-          return productRepository.update(updated);
-        });
-  }
+public Mono<Product> updateStock(UpdateProductStockCommand cmd) {
+  ProductId pid = new ProductId(cmd.getProductId());
+
+  return stockRepository.findByProductId(pid)
+    .switchIfEmpty(Mono.error(new NoSuchElementException(
+       "Stock not found for product " + pid.getValue())))
+    .flatMap(stock -> {
+      Stock updatedStock = Stock.builder()
+          .id(stock.getId())
+          .quantity(cmd.getQuantity())
+          .build();
+
+      return stockRepository.update(updatedStock)
+        .then(productRepository.findById(pid.getValue()))
+        .map(product -> product.withStock(updatedStock));
+    });
+}
 
   @Override
   public Mono<Product> updateName(UpdateProductNameCommand cmd) {

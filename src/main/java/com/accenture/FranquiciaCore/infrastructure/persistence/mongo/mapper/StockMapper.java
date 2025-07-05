@@ -17,7 +17,6 @@ public class StockMapper {
 
   public static StockDocument toDocument(Stock stock) {
     return StockDocument.builder()
-        // asumimos que stock.getId() ya trae el productId (por el .withProductId())
         .id(new ObjectId(stock.getId().getValue()))
         .productId(new ObjectId(stock.getId().getValue()))
         .quantity(stock.getQuantity())

@@ -8,7 +8,7 @@ import com.accenture.franquiciaCore.domain.franchise.repository.StockRepository;
 import com.accenture.franquiciaCore.domain.franchise.valueobject.ProductId;
 import com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper.StockMapper;
 import com.accenture.franquiciaCore.infrastructure.persistence.mongo.repository.StockMongoRepository;
-
+import java.util.NoSuchElementException;
 import reactor.core.publisher.Mono;
 import lombok.RequiredArgsConstructor;
 
@@ -20,9 +20,13 @@ public class MongoStockRepository implements StockRepository {
 
   @Override
   public Mono<Stock> findByProductId(ProductId productId) {
-    return repository.findByProductId(productId)
+    ObjectId oid = new ObjectId(productId.getValue());
+    return repository.findByProductId(oid)
+        .switchIfEmpty(Mono.error(
+           new NoSuchElementException("Stock not found for product " + productId.getValue())))
         .map(StockMapper::toDomain);
   }
+
 
   @Override
   public Mono<Stock> save(Stock stock) {
