@@ -9,7 +9,7 @@ import com.accenture.franquiciaCore.infrastructure.persistence.mongo.repository.
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
+import org.bson.types.ObjectId;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +21,7 @@ public class MongoProductRepository implements ProductRepository {
 
     @Override
     public Mono<Product> findById(String id) {
-        return repository.findById(id)
+        return repository.findById(new ObjectId(id))
                 .map(ProductMapper::toDomain);
     }
 
@@ -33,7 +33,7 @@ public class MongoProductRepository implements ProductRepository {
 
     @Override
     public Mono<Void> delete(String id) {
-        return repository.deleteById(id);
+        return repository.deleteById(new ObjectId(id));
     }
 
     @Override
@@ -44,7 +44,7 @@ public class MongoProductRepository implements ProductRepository {
 
     @Override
     public Flux<Product> findBySubsidiaryId(String subsidiaryId) {
-        return repository.findBySubsidiaryId(subsidiaryId)
+        return repository.findBySubsidiaryId(new ObjectId(subsidiaryId))
                 .map(ProductMapper::toDomain);
     }
 

@@ -5,6 +5,7 @@ import java.util.NoSuchElementException;
 import com.accenture.franquiciaCore.domain.shared.util.IdGenerator;
 import com.accenture.franquiciaCore.application.subsidiary.AddSubsidiaryCommand;
 import com.accenture.franquiciaCore.application.subsidiary.AddSubsidiaryUseCase;
+import com.accenture.franquiciaCore.application.subsidiary.FindAllSubsidiaryUseCase;
 import com.accenture.franquiciaCore.domain.franchise.model.Subsidiary;
 import com.accenture.franquiciaCore.domain.franchise.repository.FranchiseRepository;
 import com.accenture.franquiciaCore.domain.franchise.repository.SubsidiaryRepository;
@@ -13,10 +14,11 @@ import com.accenture.franquiciaCore.domain.franchise.valueobject.SubsidiaryId;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
-public class SubsidiaryService implements AddSubsidiaryUseCase {
+public class SubsidiaryService implements AddSubsidiaryUseCase, FindAllSubsidiaryUseCase {
   private final SubsidiaryRepository subsidiaryRepository;
   private final FranchiseRepository  franchiseRepository;  
 
@@ -33,5 +35,10 @@ public class SubsidiaryService implements AddSubsidiaryUseCase {
         franchise.addSubsidiary(sub);
         return subsidiaryRepository.save(sub);
       });
+  }
+
+  @Override
+  public Flux<Subsidiary> findAll() {
+    return subsidiaryRepository.findAll();
   }
 }

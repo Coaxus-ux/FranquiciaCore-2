@@ -9,7 +9,7 @@ import com.accenture.franquiciaCore.infrastructure.persistence.mongo.repository.
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
+import org.bson.types.ObjectId;
 import lombok.RequiredArgsConstructor;
 
 @Repository
@@ -19,7 +19,7 @@ public class MongoSubsidiaryRespository implements SubsidiaryRepository {
 
     @Override
     public Mono<Subsidiary> findById(String id) {
-        return repository.findById(id)
+        return repository.findById(new ObjectId(id))
                 .map(SubsidiaryMapper::toDomain);
     }
 
@@ -30,18 +30,13 @@ public class MongoSubsidiaryRespository implements SubsidiaryRepository {
     }
 
     @Override
-    public Mono<Void> delete(String id) {
-        return repository.deleteById(id);
-    }
-
-    @Override
     public Mono<Subsidiary> update(Subsidiary subsidiary) {
         return save(subsidiary);
     }
 
     @Override
-    public Flux<Subsidiary> findByFranchiseId(String franchiseId) {
-        return repository.findByFranchiseId(franchiseId)
+    public Flux<Subsidiary> findAll() {
+        return repository.findAll()
                 .map(SubsidiaryMapper::toDomain);
     }
 }

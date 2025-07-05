@@ -7,10 +7,8 @@ import com.accenture.franquiciaCore.domain.franchise.valueobject.ProductId;
 import com.accenture.franquiciaCore.domain.franchise.valueobject.StockId;
 import com.accenture.franquiciaCore.domain.franchise.valueobject.SubsidiaryId;
 import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.ProductDocument;
-import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.SubsidiaryDocument;
 import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.StockDocument;
 import org.bson.types.ObjectId;
-import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.FranchiseDocument;
 
 public class ProductMapper {
     public static Product toDomain(ProductDocument doc) {
@@ -22,7 +20,7 @@ public class ProductMapper {
                         .id(new StockId(doc.getStock().getId().toString()))
                         .quantity(doc.getStock().getQuantity())
                         .build())
-                .subsidiaryId(new SubsidiaryId(doc.getSubsidiary().getId().toString()))
+                .subsidiaryId(new SubsidiaryId(doc.getSubsidiaryId().toString()))
                 .build();
     }
 
@@ -32,10 +30,7 @@ public class ProductMapper {
                 .name(product.getName())
                 .category(product.getCategory().name())
                 .stock(StockDocument.builder().quantity(product.getStock().getQuantity()).build())
-                .subsidiary(SubsidiaryDocument.builder()
-                    .id(new ObjectId(product.getSubsidiaryId().toString()))
-                    .name(product.getSubsidiaryId().toString())
-                    .build())
+                .subsidiaryId(new ObjectId(product.getSubsidiaryId().toString()))
                 .build();
     }
 }

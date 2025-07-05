@@ -2,7 +2,6 @@ package com.accenture.franquiciaCore.infrastructure.persistence.mongo.model;
 
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.bson.types.ObjectId;
 
@@ -17,6 +16,5 @@ public class ProductDocument {
     private String name;
     private String category;
     private StockDocument stock;
-    @DBRef(lazy = true)
-    private SubsidiaryDocument subsidiary;
+    private ObjectId subsidiaryId;
 }

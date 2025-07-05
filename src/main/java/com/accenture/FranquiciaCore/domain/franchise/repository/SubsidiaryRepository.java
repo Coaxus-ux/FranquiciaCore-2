@@ -7,8 +7,7 @@ import reactor.core.publisher.Mono;
 
 public interface SubsidiaryRepository {
     Mono<Subsidiary> findById(String id);
-    Flux<Subsidiary> findByFranchiseId(String franchiseId);
     Mono<Subsidiary> save(Subsidiary subsidiary);
-    Mono<Void> delete(String id);
     Mono<Subsidiary> update(Subsidiary subsidiary);
+    Flux<Subsidiary> findAll();
 }
