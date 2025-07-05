@@ -3,18 +3,19 @@ package com.accenture.franquiciaCore.infrastructure.persistence.mongo.mapper;
 import com.accenture.franquiciaCore.domain.franchise.model.Stock;
 import com.accenture.franquiciaCore.domain.franchise.valueobject.StockId;
 import com.accenture.franquiciaCore.infrastructure.persistence.mongo.model.StockDocument;
+import org.bson.types.ObjectId;
 
 public class StockMapper {
   public static Stock toDomain(StockDocument doc) {
     return Stock.builder()
-        .id(new StockId(doc.getId()))
+        .id(new StockId(doc.getId().toString()))
         .quantity(doc.getQuantity())
         .build();
   }
 
   public static StockDocument toDocument(Stock stock) {
     return StockDocument.builder()
-        .id(stock.getId().toString())
+        .id(new ObjectId(stock.getId().toString()))
         .quantity(stock.getQuantity())
         .build();
   }
