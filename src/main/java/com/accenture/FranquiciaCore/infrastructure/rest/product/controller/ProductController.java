@@ -22,6 +22,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
+
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -44,6 +47,7 @@ public class ProductController {
   @PostMapping("/subsidiaries/{subsidiaryId}/products")
   public Mono<ResponseEntity<EntityModel<ProductResponse>>> create(
       @PathVariable String subsidiaryId,
+      @Valid
       @RequestBody CreateProductRequest req) {
 
     AddProductCommand cmd = new AddProductCommand(
@@ -62,6 +66,7 @@ public class ProductController {
   public Mono<ResponseEntity<EntityModel<ProductResponse>>> updateStock(
       @PathVariable String subsidiaryId,
       @PathVariable String productId,
+      @Valid
       @RequestBody UpdateStockRequest req) {
 
     UpdateProductStockCommand cmd =
@@ -76,6 +81,7 @@ public class ProductController {
   public Mono<ResponseEntity<EntityModel<ProductResponse>>> updateName(
       @PathVariable String subsidiaryId,
       @PathVariable String productId,
+      @Valid
       @RequestBody UpdateProductNameRequest req) {
 
     UpdateProductNameCommand cmd =
