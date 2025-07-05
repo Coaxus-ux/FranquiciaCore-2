@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +36,8 @@ public class FranchiseService implements CreateFranchiseUseCase, FindFranchiseUs
 
   @Override
   public Mono<Franchise> findFranchise(FindFranchiseCommand cmd) {
-    return franchiseRepository.findById(cmd.getId());
+    return franchiseRepository.findById(cmd.getId())
+        .switchIfEmpty(Mono.error(new NoSuchElementException("Franchise not found " + cmd.getId())));
   }
 
   @Override

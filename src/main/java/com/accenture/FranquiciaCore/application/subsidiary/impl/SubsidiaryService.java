@@ -6,6 +6,8 @@ import com.accenture.franquiciaCore.domain.shared.util.IdGenerator;
 import com.accenture.franquiciaCore.application.subsidiary.AddSubsidiaryCommand;
 import com.accenture.franquiciaCore.application.subsidiary.AddSubsidiaryUseCase;
 import com.accenture.franquiciaCore.application.subsidiary.FindAllSubsidiaryUseCase;
+import com.accenture.franquiciaCore.application.subsidiary.FindSubsidiaryCommand;
+import com.accenture.franquiciaCore.application.subsidiary.FindSubsidiaryUseCase;
 import com.accenture.franquiciaCore.domain.franchise.model.Subsidiary;
 import com.accenture.franquiciaCore.domain.franchise.repository.FranchiseRepository;
 import com.accenture.franquiciaCore.domain.franchise.repository.SubsidiaryRepository;
@@ -18,7 +20,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 @Service
 @RequiredArgsConstructor
-public class SubsidiaryService implements AddSubsidiaryUseCase, FindAllSubsidiaryUseCase {
+public class SubsidiaryService implements AddSubsidiaryUseCase, FindAllSubsidiaryUseCase, FindSubsidiaryUseCase {
   private final SubsidiaryRepository subsidiaryRepository;
   private final FranchiseRepository  franchiseRepository;  
 
@@ -40,5 +42,11 @@ public class SubsidiaryService implements AddSubsidiaryUseCase, FindAllSubsidiar
   @Override
   public Flux<Subsidiary> findAll() {
     return subsidiaryRepository.findAll();
+  }
+
+  @Override
+  public Mono<Subsidiary> findById(FindSubsidiaryCommand cmd) {
+    return subsidiaryRepository.findById(cmd.getId())
+      .switchIfEmpty(Mono.error(new NoSuchElementException("Subsidiary not found " + cmd.getId())));
   }
 }
