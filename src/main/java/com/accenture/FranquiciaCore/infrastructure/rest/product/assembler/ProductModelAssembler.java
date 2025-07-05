@@ -22,30 +22,25 @@ public class ProductModelAssembler
 
   @Override
   public EntityModel<ProductResponse> toModel(Product product) {
-    // 1) convierto al DTO
+    
     ProductResponse dto = mapper.toResponse(product);
 
-    // 2) construyo links HATEOAS
     return EntityModel.of(dto,
-      // Self: GET /api/subsidiaries/{subsidiaryId}/products/{productId}
       linkTo(methodOn(ProductController.class)
           .create(product.getSubsidiaryId().getValue(), null))
         .withSelfRel(),
-      // Update stock
       linkTo(methodOn(ProductController.class)
           .updateStock(
              product.getSubsidiaryId().getValue(),
              product.getId().getValue(),
              null))
         .withRel("updateStock"),
-      // Update name
       linkTo(methodOn(ProductController.class)
           .updateName(
              product.getSubsidiaryId().getValue(),
              product.getId().getValue(),
              null))
         .withRel("updateName"),
-      // Delete
       linkTo(methodOn(ProductController.class)
           .delete(
              product.getSubsidiaryId().getValue(),

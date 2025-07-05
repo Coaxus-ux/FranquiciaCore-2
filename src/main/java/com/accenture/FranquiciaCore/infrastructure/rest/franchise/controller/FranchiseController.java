@@ -18,10 +18,13 @@ import com.accenture.franquiciaCore.application.franchise.FindFranchiseUseCase;
 import com.accenture.franquiciaCore.application.franchise.UpdateFranchiseCommand;
 import com.accenture.franquiciaCore.application.franchise.UpdateFranchiseUseCase;
 import com.accenture.franquiciaCore.application.franchise.FindAllFranchiseUseCase;
+import com.accenture.franquiciaCore.application.franchise.FindTopProductsUseCase;
 import com.accenture.franquiciaCore.infrastructure.rest.franchise.dto.CreateFranchiseRequest;
 import com.accenture.franquiciaCore.infrastructure.rest.franchise.dto.FranchiseResponse;
+import com.accenture.franquiciaCore.infrastructure.rest.franchise.dto.FranchiseTopProductsResponse;
 import com.accenture.franquiciaCore.infrastructure.rest.franchise.assembler.FranchiseModelAssembler;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import lombok.RequiredArgsConstructor;
@@ -38,6 +41,7 @@ public class FranchiseController {
   private final FindFranchiseUseCase findFranchiseUseCase;
   private final UpdateFranchiseUseCase updateFranchiseUseCase;
   private final FindAllFranchiseUseCase findAllFranchiseUseCase;
+  private final FindTopProductsUseCase findTopProductsUseCase;
   private final FranchiseModelAssembler assembler;
 
   @PostMapping
@@ -84,5 +88,10 @@ public class FranchiseController {
         .map(assembler::toModel)
         .collectList()
         .map(ResponseEntity::ok);
+  }
+  
+  @GetMapping("/top")
+  public Flux<FranchiseTopProductsResponse> topAll() {
+    return findTopProductsUseCase.findAllTopProducts();
   }
 }

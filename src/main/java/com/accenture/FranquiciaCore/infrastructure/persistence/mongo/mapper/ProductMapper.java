@@ -12,7 +12,7 @@ import org.bson.types.ObjectId;
 
 public class ProductMapper {
 
-    // Document → Dominio (igual que antes)
+
     public static Product toDomain(ProductDocument doc) {
         Stock stock = null;
         if (doc.getStock() != null) {
@@ -20,7 +20,7 @@ public class ProductMapper {
                     .id(new StockId(doc.getStock().getId().toString()))
                     .quantity(doc.getStock().getQuantity())
                     .build()
-                    .withProductId(new ProductId(doc.getId().toString())); // ojo: productId viene del propio doc.id
+                    .withProductId(new ProductId(doc.getId().toString())); 
         }
         return Product.builder()
                 .id(new ProductId(doc.getId().toString()))
@@ -42,9 +42,7 @@ public class ProductMapper {
             Stock stock = product.getStock();
             builder.stock(
                 StockDocument.builder()
-                    // aquí usamos el ID del stock como _id
                     .id(new ObjectId(stock.getId().getValue()))
-                    // y el productId lo sacamos de product.getId()
                     .productId(new ObjectId(product.getId().getValue()))
                     .quantity(stock.getQuantity())
                     .build()

@@ -42,30 +42,30 @@ public class ProductService implements
   @Override
   public Mono<Product> addProduct(AddProductCommand cmd) {
     return subsidiaryRepository.findById(cmd.getSubsidiaryId())
-      .switchIfEmpty(Mono.error(
-         new NoSuchElementException("Subsidiary not found: " + cmd.getSubsidiaryId())))
-      .flatMap(sub -> {
-        String newProdId  = IdGenerator.generate();
-        String newStockId = IdGenerator.generate();
+        .switchIfEmpty(Mono.error(
+            new NoSuchElementException("Subsidiary not found: " + cmd.getSubsidiaryId())))
+        .flatMap(sub -> {
+          String newProdId = IdGenerator.generate();
+          String newStockId = IdGenerator.generate();
 
-        Product product = Product.builder()
-            .id(new ProductId(newProdId))
-            .name(cmd.getName())
-            .category(CategoryProduct.valueOf(cmd.getCategory().toUpperCase()))
-            .subsidiaryId(sub.getId())
-            .build();
+          Product product = Product.builder()
+              .id(new ProductId(newProdId))
+              .name(cmd.getName())
+              .category(CategoryProduct.valueOf(cmd.getCategory().toUpperCase()))
+              .subsidiaryId(sub.getId())
+              .build();
 
-        return productRepository.save(product)
-          .flatMap(savedProduct -> {
-            Stock stock = Stock.builder()
-                .id(new StockId(newStockId))
-                .quantity(cmd.getQuantity())
-                .build();
-            return stockRepository
-              .save(stock.withProductId(savedProduct.getId()))
-              .thenReturn(savedProduct.withStock(stock));
-          });
-      });
+          return productRepository.save(product)
+              .flatMap(savedProduct -> {
+                Stock stock = Stock.builder()
+                    .id(new StockId(newStockId))
+                    .quantity(cmd.getQuantity())
+                    .build();
+                return stockRepository
+                    .save(stock.withProductId(savedProduct.getId()))
+                    .thenReturn(savedProduct.withStock(stock));
+              });
+        });
   }
 
   @Override
@@ -80,49 +80,47 @@ public class ProductService implements
     ProductId pid = new ProductId(cmd.getProductId());
 
     return stockRepository.findByProductId(pid)
-      .switchIfEmpty(Mono.error(
-         new NoSuchElementException("Stock not found for product " + pid.getValue())))
-      .flatMap(stock -> {
-        Stock updatedStock = Stock.builder()
-            .id(stock.getId())
-            .quantity(cmd.getQuantity())
-            .build();
-        return stockRepository.update(updatedStock)
-          .then(productRepository.findById(pid.getValue()))
-          .map(product -> product.withStock(updatedStock));
-      });
+        .switchIfEmpty(Mono.error(
+            new NoSuchElementException("Stock not found for product " + pid.getValue())))
+        .flatMap(stock -> {
+          Stock updatedStock = Stock.builder()
+              .id(stock.getId())
+              .quantity(cmd.getQuantity())
+              .build();
+          return stockRepository.update(updatedStock)
+              .then(productRepository.findById(pid.getValue()))
+              .map(product -> product.withStock(updatedStock));
+        });
   }
 
   @Override
   public Mono<Product> updateName(UpdateProductNameCommand cmd) {
     return productRepository.findById(cmd.getProductId())
-      .switchIfEmpty(Mono.error(
-         new NoSuchElementException("Product not found")))
-      .flatMap(p -> {
-        Product updated = Product.builder()
-            .id(p.getId())
-            .name(cmd.getName())
-            .category(p.getCategory())
-            .stock(p.getStock())
-            .subsidiaryId(p.getSubsidiaryId())
-            .build();
-        return productRepository.update(updated);
-      })
-      .flatMap(prod ->
-        stockRepository.findByProductId(
-          new ProductId(prod.getId().getValue()))
-          .map(stock -> prod.withStock(stock))
-      );
+        .switchIfEmpty(Mono.error(
+            new NoSuchElementException("Product not found")))
+        .flatMap(p -> {
+          Product updated = Product.builder()
+              .id(p.getId())
+              .name(cmd.getName())
+              .category(p.getCategory())
+              .stock(p.getStock())
+              .subsidiaryId(p.getSubsidiaryId())
+              .build();
+          return productRepository.update(updated);
+        })
+        .flatMap(prod -> stockRepository.findByProductId(
+            new ProductId(prod.getId().getValue()))
+            .map(stock -> prod.withStock(stock)));
   }
 
   @Override
   public Flux<Product> findMaxStockByFranchise(FindMaxStockCommand cmd) {
     return subsidiaryRepository.findByFranchiseId(cmd.getFranchiseId())
-      .flatMap(sub ->
-        productRepository.findBySubsidiaryId(sub.getId().getValue())
-          .sort((a, b) ->
-            Integer.compare(b.getStock().getQuantity(), a.getStock().getQuantity()))
-          .next()
-      );
+        .flatMap(sub -> productRepository.findBySubsidiaryId(sub.getId().getValue())
+            .flatMap(product -> stockRepository.findByProductId(product.getId())
+                .map(stock -> product.withStock(stock)))
+            .sort((a, b) -> Integer.compare(b.getStock().getQuantity(), a.getStock().getQuantity()))
+            .next());
   }
+  
 }
