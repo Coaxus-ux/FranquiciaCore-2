@@ -20,6 +20,27 @@ public class Product {
   private Stock stock;
   private SubsidiaryId subsidiaryId;
 
+  public Product(ProductId id, String name, CategoryProduct category, Stock stock, SubsidiaryId subsidiaryId) {
+    this.id = id;
+    this.name = validateName(name);
+    this.category = category;
+    this.stock = stock;
+    this.subsidiaryId = subsidiaryId;
+  }
+
+  private String validateName(String name) {
+    if (name == null || name.trim().isEmpty()) {
+      throw new IllegalArgumentException("Product name cannot be empty");
+    }
+    if (name.trim().length() < 3) {
+      throw new IllegalArgumentException("Product name must be at least 3 characters long");
+    }
+    if (name.trim().length() > 255) {
+      throw new IllegalArgumentException("Product name cannot exceed 255 characters");
+    }
+    return name.trim();
+  }
+
   public Product withStock(Stock stock) {
     return this.toBuilder()
                .stock(stock)

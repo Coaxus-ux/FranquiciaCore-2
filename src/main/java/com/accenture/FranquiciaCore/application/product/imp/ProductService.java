@@ -41,6 +41,8 @@ public class ProductService implements
 
   @Override
   public Mono<Product> addProduct(AddProductCommand cmd) {
+    cmd.validate();
+    
     return subsidiaryRepository.findById(cmd.getSubsidiaryId())
         .switchIfEmpty(Mono.error(
             new NoSuchElementException("Subsidiary not found: " + cmd.getSubsidiaryId())))
@@ -48,12 +50,13 @@ public class ProductService implements
           String newProdId = IdGenerator.generate();
           String newStockId = IdGenerator.generate();
 
-          Product product = Product.builder()
-              .id(new ProductId(newProdId))
-              .name(cmd.getName())
-              .category(CategoryProduct.valueOf(cmd.getCategory().toUpperCase()))
-              .subsidiaryId(sub.getId())
-              .build();
+          Product product = new Product(
+              new ProductId(newProdId),
+              cmd.getName().trim(),
+              CategoryProduct.valueOf(cmd.getCategory().toUpperCase()),
+              null,
+              sub.getId()
+          );
 
           return productRepository.save(product)
               .flatMap(savedProduct -> {
@@ -95,13 +98,15 @@ public class ProductService implements
 
   @Override
   public Mono<Product> updateName(UpdateProductNameCommand cmd) {
+    cmd.validate();
+    
     return productRepository.findById(cmd.getProductId())
         .switchIfEmpty(Mono.error(
             new NoSuchElementException("Product not found")))
         .flatMap(p -> {
           Product updated = Product.builder()
               .id(p.getId())
-              .name(cmd.getName())
+              .name(cmd.getName().trim())
               .category(p.getCategory())
               .stock(p.getStock())
               .subsidiaryId(p.getSubsidiaryId())

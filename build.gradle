@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.5.3'
 	id 'io.spring.dependency-management' version '1.1.7'
+	id 'com.adarshr.test-logger' version '4.0.0'
 }
 
 group = 'com.accenture'
@@ -27,13 +28,29 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'io.projectreactor:reactor-test'
-	testImplementation 'org.mockito:mockito-inline'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+tasks.test {
+    useJUnitPlatform()
+
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "short"
+        showStandardStreams = true
+        displayGranularity 1
+    }
+		outputs.upToDateWhen { false }
+}
+testlogger {
+    theme 'mocha'
+    showStandardStreams true
 }
 configurations.testImplementation {
     exclude group: 'junit', module: 'junit'
+}
+
+testlogger {
+    theme 'mocha'
+    showStandardStreams true
 }
